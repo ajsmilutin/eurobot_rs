@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}    
+{% wagtail_site as current_site %}
+    {% if page.raw_html %}
+    {{ page.body }}
+    {% else %}
+    {{ page.body|richtext }}
+    {% endif %}
+{% endblock %}

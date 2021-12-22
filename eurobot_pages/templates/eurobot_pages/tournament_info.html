@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n  %}
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}    
+{{ page.body|richtext }}
+{% with tournament=page.tournament %}
+<h2>{% trans 'Place and time' %}</h2>
+<table class="table">
+  <tr>
+    <th>{% trans 'Place' %}</th>
+    <td>{{ tournament.city }}</td>
+  </tr>
+  <tr>
+    <th>{% trans 'Start' %}</th>
+    <td>{{ tournament.start_date | date:"j. F, Y."}}</td>
+  </tr>
+  <tr>
+    <th>{% trans 'End' %}</th>
+    <td>{{ tournament.end_date | date:"j. F, Y." }}</td>
+  </tr>
+  <tr>
+    <th>{% trans 'Teams' %}</th>
+    <td>{{ tournament.players.count }}</td>    
+  </tr>
+</table>
+
+<h2>{% trans 'Teams' %}</h2>
+<table class="table">
+	<tr>	  
+	  <th>{% trans 'Name' %}</th>
+	  <th>{% trans 'School' %}</th>
+	  <th>{% trans 'City' %}</th>
+	  <th>{% trans 'Homologated' %}</th>
+	</tr>    
+	{% for player in tournament.players.all %}
+	<tr>
+	  <td>{{ player.name|safe }}</td>
+    <td>{{ player.school }}</td>
+    <td>{{ player.city }}</td>
+    {% if player.dynamic_homologation == True %}
+    <td class="success">{% trans 'YES' %}</td>
+    {% elif player.static_homologation == True %}
+    <td class="warning">{% trans 'MEASURED' %}</td>
+    {% else %}
+    <td class="danger">{% trans 'NO' %}</td>
+    {% endif %}	  
+	</tr>
+	{% endfor %}
+</table>
+{% comment %} {% endwith %} {% endcomment %}
+{% endwith %}
+{% endblock %}
