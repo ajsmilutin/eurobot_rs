@@ -25,14 +25,6 @@ class TournamentRounds(RichTextPage):
     content_panels = RichTextPage.content_panels + [
         FieldPanel('tournament'),
     ]
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-
-        rounds = self.tournament.rounds.order_by('-round_date')
-        if rounds:
-            context['rounds'] = rounds
-        return context
-
 
 class TournamentStandings(RichTextPage):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
@@ -49,6 +41,7 @@ class TournamentStandings(RichTextPage):
 
             for i in range(rounds.count()):
                 round = rounds[i]
+                print(round)
                 for game in round.games.all():
                     if not game.player_dummy:
                         info = player_info[game.player.name]

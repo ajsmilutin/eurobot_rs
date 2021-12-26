@@ -1,8 +1,3 @@
-from cProfile import label
-import imp
-from pydoc import classname
-from statistics import mode
-from tkinter import Label
 from turtle import heading
 from django.db import models
 
@@ -21,6 +16,23 @@ class Tournament(ClusterableModel):
 
     player_color = models.CharField(max_length=7, default="#ADD0E4")
     opponent_color = models.CharField(max_length=7, default="#E2DFB6")
+
+    first_place = models.OneToOneField('Player',
+                                       related_name='first_place',
+                                       blank=True,
+                                       null=True,
+                                       on_delete=models.SET_NULL)
+    second_place = models.OneToOneField('Player',
+                                        related_name='second_place',
+                                        blank=True,
+                                        null=True,
+                                        on_delete=models.SET_NULL)
+    third_place = models.OneToOneField('Player',
+                                       related_name='third_place',
+                                       blank=True,
+                                       null=True,
+                                       on_delete=models.SET_NULL)
+
     custom_panels = [
         FieldPanel('name'),
         FieldPanel('city'),
@@ -31,12 +43,22 @@ class Tournament(ClusterableModel):
             FieldPanel('opponent_color'),
         ])
     ]
-
     player_panels = [InlinePanel('players', label='Players')]
+    round_panels = [
+        InlinePanel('elimination_rounds', label='Elimination Rounds'),
+        InlinePanel('rounds', label='Rounds')
+    ]
+    final_results = [
+        FieldPanel('first_place', ),
+        FieldPanel('second_place'),
+        FieldPanel('third_place')
+    ]
 
     edit_handler = TabbedInterface([
         ObjectList(custom_panels, heading='General Details'),
         ObjectList(player_panels, heading='Player Details'),
+        ObjectList(round_panels, heading='Rounds'),
+        ObjectList(final_results, heading='Final results')
     ])
 
     def __str__(self):
@@ -58,9 +80,10 @@ class Player(models.Model):
             FieldPanel('name'),
             FieldPanel('city'),
         ]),
-        FieldRowPanel([FieldPanel('school',classname='col6'),
-            FieldPanel('static_homologation',classname='col3'),
-            FieldPanel('dynamic_homologation',classname='col3'),
+        FieldRowPanel([
+            FieldPanel('school', classname='col6'),
+            FieldPanel('static_homologation', classname='col3'),
+            FieldPanel('dynamic_homologation', classname='col3'),
         ])
     ]
 
@@ -83,21 +106,22 @@ class Round(ClusterableModel):
         InlinePanel('games', label='Game')
     ]
 
+    class Meta:
+        ordering = ["-round_date"]
+
     def __str__(self):
         return self.tournament.name + " - " + self.name
 
 
 class Game(models.Model):
-    GAME_STATUSES = (
-        (_('planned'), _('Planned')),
-        (_('finished'), _('Finished'))
-    )
+    GAME_STATUSES = ((_('planned'), _('Planned')), (_('finished'),
+                                                    _('Finished')))
 
     round = ParentalKey(Round,
-                              related_name='games',
-                              on_delete=models.SET_NULL,
-                              blank=True,
-                              null=True)
+                        related_name='games',
+                        on_delete=models.SET_NULL,
+                        blank=True,
+                        null=True)
     player = models.ForeignKey(Player,
                                related_name="player_a",
                                null=True,
@@ -130,4 +154,79 @@ class Game(models.Model):
     ]
 
     def __str__(self):
-        return str(self.player) + " " + str(self.player_score) + ":" + str(self.opponent_score) + " " + str(self.opponent)
+        return str(self.player) + " " + str(self.player_score) + ":" + str(
+            self.opponent_score) + " " + str(self.opponent)
+
+
+class EliminationRound(ClusterableModel):
+    tournament = ParentalKey(Tournament,
+                             on_delete=models.CASCADE,
+                             related_name='elimination_rounds')
+    round_date = models.DateTimeField()
+    name = models.CharField(max_length=200)
+
+    panels = [
+        FieldRowPanel([
+            FieldPanel('name', classname="col8"),
+            FieldPanel('round_date', classname="col4"),
+        ]),
+        InlinePanel('games', label='Game')
+    ]
+
+    class Meta:
+        ordering = ["-round_date"]
+
+    def __str__(self):
+        return self.tournament.name + " - " + self.name
+
+
+class EliminationGame(models.Model):
+    elimination_round = ParentalKey(EliminationRound,
+                                    on_delete=models.CASCADE,
+                                    related_name='games')
+    player = models.ForeignKey(Player,
+                               related_name="player_1",
+                               on_delete=models.CASCADE)
+    opponent = models.ForeignKey(Player,
+                                 related_name="player_2",
+                                 on_delete=models.CASCADE)
+    player_score_0 = models.PositiveIntegerField(default=0)
+    opponent_score_0 = models.PositiveIntegerField(default=0)
+    player_score_1 = models.PositiveIntegerField(default=0)
+    opponent_score_1 = models.PositiveIntegerField(default=0)
+    player_score_2 = models.PositiveIntegerField(default=0)
+    opponent_score_2 = models.PositiveIntegerField(default=0)
+    panels = [
+        FieldRowPanel([
+            FieldPanel('player', classname="col6"),
+            FieldPanel('opponent', classname="col6")
+        ]),
+        FieldRowPanel([
+            FieldPanel('player_score_0', classname="col6"),
+            FieldPanel('opponent_score_0', classname="col6")
+        ]),
+        FieldRowPanel([
+            FieldPanel('player_score_1', classname="col6"),
+            FieldPanel('opponent_score_1', classname="col6")
+        ]),
+        FieldRowPanel([
+            FieldPanel('player_score_2', classname="col6"),
+            FieldPanel('opponent_score_2', classname="col6")
+        ])
+    ]
+
+    def player_wins(self):
+        return (self.player_score_0 > self.opponent_score_0
+                and self.player_score_1 > self.opponent_score_1) or (
+                    self.player_score_0 > self.opponent_score_0
+                    and self.player_score_2 > self.opponent_score_2) or (
+                        self.player_score_2 > self.opponent_score_2
+                        and self.player_score_1 > self.opponent_score_1)
+
+    def opponent_wins(self):
+        return (self.player_score_0 < self.opponent_score_0
+                and self.player_score_1 < self.opponent_score_1) or (
+                    self.player_score_0 < self.opponent_score_0
+                    and self.player_score_2 < self.opponent_score_2) or (
+                        self.player_score_2 < self.opponent_score_2
+                        and self.player_score_1 < self.opponent_score_1)

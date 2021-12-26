@@ -9,26 +9,26 @@
 {{ page.body|richtext }}
 {% with tournament=page.tournament %}
 
-{% if first_place or third_place or second_place %}
+{% if tournament.first_place or tournament.third_place or tournament.second_place %}
 <h1>{% trans 'Final Standings' %}</h1>
 <table class="table">
-{% if first_place %}
+{% if tournament.first_place %}
 <tr>
 	<td class="col-md-2">{% trans 'Champion' %}:</td>  
-	<td class="col-md-8"><h3>{{first_place.name|safe}}, {{first_place.school}}, {{first_place.city}}</h3></td>
+	<td class="col-md-8"><h3>{{tournament.first_place.name|safe}}, {{tournament.first_place.school}}, {{tournament.first_place.city}}</h3></td>
 </tr>
 {% endif %}
 
-{% if second_place %}
+{% if tournament.second_place %}
 <tr>
 	<td class="col-md-2">{% trans 'Second place' %}:</td>  
-	<td class="col-md-8"><h3>{{second_place.name|safe}}, {{second_place.school}}, {{second_place.city}}</h3></td>
+	<td class="col-md-8"><h3>{{tournament.second_place.name|safe}}, {{tournament.second_place.school}}, {{tournament.second_place.city}}</h3></td>
 </tr>
 {% endif %}
-{% if third_place %}
+{% if tournament.third_place %}
 <tr>	
 	<td>{% trans 'Third place' %}:</td>  
-	<td><h3>{{third_place.name|safe}}, {{third_place.school}}, {{third_place.city}}</h3></td>
+	<td><h3>{{tournament.third_place.name|safe}}, {{tournament.third_place.school}}, {{tournament.third_place.city}}</h3></td>
 </tr>
 {% endif %}
 </table>

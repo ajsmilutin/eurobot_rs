@@ -5,32 +5,96 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
-{% block content %}    
+{% block content %}
 {{ page.body|richtext }}
 {% with tournament=page.tournament %}
+{% if tournament.elimination_rounds.all %}
+<h2>{% trans 'Elimination rounds' %}</h2>
+{% for elimination in tournament.elimination_rounds.all %}
+<h2>{{ elimination.name }}, {{ elimination.round_date | date:"j. F, Y. G:i" }}</h2>
+{% for game in elimination.games.all %}
+<table class="table" style="margin-bottom:40px">
+  <tr>
+    <th style="width:40%">{% trans 'Teams' %}</th>
+    <th style="width:20%">{% trans 'G1' %}</th>
+    <th style="width:20%">{% trans 'G2' %}</th>
+    <th style="width:20%">{% trans 'G3' %}</th>
+  </tr>
+  <tr>
+    {% if game.player_wins %}
+    <td><b><i>{{ game.player|safe }}</i></b></td>
+    {% else %}
+    <td>{{ game.player|safe }}</td>
+    {% endif %}
+    {% if game.player_score_0 > game.opponent_score_0 %}
+    <td style="background-color:{{tournament.player_color}}"><b><i>{{ game.player_score_0 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.player_color}}">{{ game.player_score_0 }}</td>
+    {% endif %}
+
+    {% if game.player_score_1 > game.opponent_score_1 %}
+    <td style="background-color:{{tournament.opponent_color}}"><b><i>{{ game.player_score_1 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.opponent_color}}">{{ game.player_score_1 }}</td>
+    {% endif %}
+
+    {% if game.player_score_2 > game.opponent_score_2 %}
+    <td style="background-color:{{tournament.player_color}}"><b><i>{{ game.player_score_2 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.player_color}}">{{ game.player_score_2 }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    {% if game.opponent_wins %}
+    <td><b><i>{{ game.opponent|safe }}</i></b></td>
+    {% else %}
+    <td>{{ game.opponent|safe }}</td>
+    {% endif %}
+    {% if game.player_score_0 < game.opponent_score_0 %}
+    <td style="background-color:{{tournament.opponent_color}}"><b><i>{{ game.opponent_score_0 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.opponent_color}}">{{ game.opponent_score_0 }}</td>
+    {% endif %}
+
+    {% if game.player_score_1 < game.opponent_score_1 %}
+    <td style="background-color:{{tournament.player_color}}"><b><i>{{ game.opponent_score_1 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.player_color}}">{{ game.opponent_score_1 }}</td>
+    {% endif %}
+
+    {% if game.player_score_2 < game.opponent_score_2 %}
+    <td style="background-color:{{tournament.opponent_color}}"><b><i>{{ game.opponent_score_2 }}</i></b></td>
+    {% else %}
+    <td style="background-color:{{tournament.opponent_color}}">{{ game.opponent_score_2 }}</td>
+    {% endif %}
+  </tr>
+</table>
+{% endfor %}
+{% endfor %}
+{% endif %}
 {% if tournament.rounds.all %}
-	{% for round in rounds %}
+	{% for round in tournament.rounds.all %}
 	<h2>{{ round.name }}, {{ round.round_date | date:"j. F, Y. G:i" }}</h2>
 	<table class="table">
-		<tr>	
+		<tr>
 			<th>{% trans 'Name' %}</th>
 			<th>{% trans 'Score' %}</th>
 			<th>{% trans 'Name' %}</th>
 			<th>{% trans 'Status' %}</th>
 		</tr>
 	{% for game in round.games.all %}
-		  <tr>	  	
-			 <td class="col-md-4"  style="background-color:{{tournament.player_color}}">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+		  <tr>
+			 <td class="col-md-5 text-right"  style="background-color:{{tournament.player_color}}">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
 			    {% if game.status == 'planned' %}
-			    	<td class="col-md-2">-</td>
+			    	<td class="col-md-1 text-center">-</td>
 			    {% else %}
-			    	<td class="col-md-2">{{ game.player_score }} : {{ game.opponent_score }}</td>
+			    	<td class="col-md-1 text-center">{{ game.player_score }} : {{ game.opponent_score }}</td>
 			    {% endif %}
-			    <td class="col-md-4" style="background-color:{{tournament.opponent_color}}">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>			    
-          <td>{% trans game.status|capfirst %}</td>
+			    <td class="col-md-5 text-left" style="background-color:{{tournament.opponent_color}}">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+          <td class="col-md-1 text-center">{% trans game.status|capfirst %}</td>
 		  </tr>
 	{% endfor %}
-	</table>	
+	</table>
 	{% endfor %}
 {% else %}
 	<h2>{% trans 'No rounds have been setup.' %}</h2>

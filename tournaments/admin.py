@@ -1,6 +1,6 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register, ModelAdminGroup
 
-from .models import Round, Tournament
+from .models import Round, Tournament, EliminationRound
 
 
 class TouramentAdmin(ModelAdmin):
@@ -18,11 +18,15 @@ class RoundAdmin(ModelAdmin):
     model = Round
     list_display = ('tournament', 'name', 'round_date')
 
+
+class EliminationRound(ModelAdmin):
+    model = EliminationRound
+    list_display = ('tournament', 'name', 'round_date')
+
 class TournamentGroup(ModelAdminGroup):
     menu_label = 'Tournaments'
     menu_icon = 'group'  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
-    items = (TouramentAdmin, RoundAdmin)
-
+    items = (TouramentAdmin, RoundAdmin, EliminationRound)
 
 modeladmin_register(TournamentGroup)
