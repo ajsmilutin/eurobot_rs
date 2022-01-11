@@ -2,7 +2,7 @@
 <ul class="nav navbar-nav navbar-right">
     {% for page in menu_pages %}
        {% if page.show_in_menus %}
-            <li class="{% if page.is_current %} active{% endif %}{% if page.is_current_or_ascendant %} active-branch{% endif %}" id="tree-menu-{{ page.html_id }}">
+            <li class="{% if page.is_current_or_ascendant %} active{% endif %}{% if page.is_current_or_ascendant %} active-branch{% endif %}" id="tree-menu-{{ page.html_id }}">
                 <a href="{% pageurl page %}"><span>{{ page.title }}</span></a></li>
         {% endif %}
     {% endfor %}

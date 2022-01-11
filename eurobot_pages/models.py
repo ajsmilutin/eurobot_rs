@@ -1,3 +1,4 @@
+from re import L
 from django.db import models
 
 from wagtail.core.models import Page
@@ -8,10 +9,38 @@ from tournaments.models import Tournament
 
 class RichTextPage(Page):
     body = RichTextField(blank=True)
-    show_in_menus_default = False
+    show_in_menus_default = True
     content_panels = Page.content_panels + [
         FieldPanel('body', classname="full"),
     ]
+
+
+class BlogEntry(RichTextPage):
+    show_in_menus_default = False
+    summary = RichTextField(blank=True)
+    content_panels = RichTextPage.content_panels + [
+        FieldPanel('summary', classname="full"),
+    ]
+    ordering = ['-first_published_at']
+
+
+class BlogListing(RichTextPage):
+    custom_title =  models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Overwrites the default title',)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('custom_title', classname="full"),
+        FieldPanel('body', classname="full"),
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["posts"] = BlogEntry.objects.live().public()
+        return context
+
 
 
 class TournamentInfo(RichTextPage):
@@ -41,7 +70,6 @@ class TournamentStandings(RichTextPage):
 
             for i in range(rounds.count()):
                 round = rounds[i]
-                print(round)
                 for game in round.games.all():
                     if not game.player_dummy:
                         info = player_info[game.player.name]

@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
         <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
         {% block extra_css %}
-        {% endblock %}        
+        {% endblock %}
 
         <script src="{% static "js/jquery.min.js" %}"></script>
         <script src="{% static "js/bootstrap.js" %}"></script>
@@ -31,12 +31,12 @@
 
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,500' rel='stylesheet' type='text/css'>
-    
+
         <!-- Font awesome -->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <!-- Academicons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css" rel="stylesheet">
-    
+
         <!-- Animate.css -->
         <link rel="stylesheet" href="{% static 'css/animate.css' %}">
         <!-- Icomoon Icon Fonts-->
@@ -62,10 +62,10 @@
                             <div class="navbar-header">
                                 <!-- Mobile Toggle Menu Button -->
                                 <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle visible-xs-block" data-toggle="collapse" data-target="#fh5co-navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                                <a class="navbar-brand" href="/">{% block header_text %}{% trans 'EUROBOT Serbia' %}{% endblock %}</a>        
+                                <a class="navbar-brand" href="/">{% block header_text %}{% trans 'EUROBOT Serbia' %}{% endblock %}</a>
                             </div>
                             <div id="fh5co-navbar" class="navbar-collapse collapse">
-                                {% top_menu "menus/header.html" %}                              
+                                {% top_menu "menus/header.html" page %}
                             </div>
                         </div>
                     </div>
@@ -81,60 +81,42 @@
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}
-        <div class="container">        
+        <div class="container">
             <div class="row">
                 <div class="col-md-offset-2 col-md-10 middle">
-                    <h1>{% block page_title %}{{ page.title }}                        
-                    {% endblock %}</h1>                    
+                    <h1>{% block page_title %}{{ page.title }}
+                    {% endblock %}</h1>
                 </div>
             </div>
         </div>
-        
+
         <div class="container">
             <div class="row">
-        
                 <div class="col-md-2 left">
                     {% block left_panel %}
-                     <div class="panel panel-default tree">{% top_menu "menus/tree.html" %}</div>
+                     <div class="panel panel-default tree">{% top_menu "menus/tree.html" page %}</div>
                     {% endblock %}
                 </div>
-        
                 <div class="col-md-10 middle">
                     {% block content %}{% endblock %}
                 </div>
-        
-        {#        <div class="col-md-3 right">#}
-        {#            {% nevercache %}#}
-        {#                {% include "includes/language_selector.html" %}#}
-        {#                {% include "includes/user_panel.html" %}#}
-        {#            {% endnevercache %}#}
-        {#            <div class="panel panel-default">#}
-        {#                <div class="panel-body">#}
-        {#                    {% block right_panel %}#}
-        {#                        {% ifinstalled mezzanine.twitter %}#}
-        {#                            {% include "twitter/tweets.html" %}#}
-        {#                        {% endifinstalled %}#}
-        {#                    {% endblock %}#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        
+
             </div>
         </div>
-        
+
         <footer>
             <div class="container">
                 {% comment %} {% page_menu "pages/menus/footer.html" %} {% endcomment %}
-        
+
                 <div class="row">
                     <p class="site-info text-center">
                         {% trans "Powered by" %}
-                        <a href="http://mezzanine.jupo.org">Mezzanine</a>
+                        <a href="https://wagtail.io/">Wagtail</a>
                         {% trans "and" %}
                         <a href="http://www.djangoproject.com">Django</a>
                         <span class="separator">|</span>
                         {% trans "Theme by" %} <a target="_blank" href="http://getbootstrap.com">Bootstrap</a>
-                
+
                     </p>
                 </div>
             </div>

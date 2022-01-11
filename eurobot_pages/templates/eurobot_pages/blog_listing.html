@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+{% load i18n  %}
+
+{% block body_class %}template-homepage{% endblock %}
+{% if page.custom_title%}
+{% block page_title %}
+{{ page.custom_title }}
+{% endblock %}
+{% endif %}
+{% block content %}    
+{% wagtail_site as current_site %}
+    {% if page.raw_html %}
+    {{ page.body }}
+    {% else %}
+    {{ page.body|richtext }}
+    {% endif %}
+    {% if posts %}       
+    <div class="container">
+        {% for post in posts%}   
+        <div class="row well">  
+            <a href="{% pageurl post%}">      
+                <div class="col-sm-12">
+                    <h2>{{post.title}}</h2>                                       
+                    <p>{{post.summary|richtext}}</p>
+                </div>
+                <div class="col-sm-4">
+                    {% trans "Published by" %}: <span class="glyphicon-user"></span> {{post.owner}}
+                </div>
+                <div class="col-sm-4">                    
+                </div>
+                <div class="col-sm-4 text-right">
+                    {% trans "Published on"%}: {{post.first_published_at}}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    {% trans "No posts available" %}
+    {% endif %}
+{% endblock %}

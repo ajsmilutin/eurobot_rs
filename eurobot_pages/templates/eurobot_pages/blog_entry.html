@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+{% load i18n  %}
+
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}    
+{% wagtail_site as current_site %}
+    <div class="col-sm-12" style="padding: 0">
+        {% if page.raw_html %}
+        {{ page.body }}
+        {% else %}
+        {{ page.body|richtext }}
+        {% endif %}    
+    </div>
+    <div class="col-sm-6">
+        {% trans "Published by" %}: <span class="glyphicon-user"></span> {{page.owner}}
+    </div>
+    <div class="col-sm-6">
+        {% trans "Published on"%}: {{page.first_published_at}}
+    </div>
+{% endblock %}

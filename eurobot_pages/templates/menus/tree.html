@@ -4,22 +4,16 @@
 
 {% spaceless %}
 <ul class="nav nav-list navlist-menu-level-{{ branch_level }}">
-  {% for page in menu_pages %}
-  {% if not has_home and page.is_primary and forloop.first %}
-  <li{% if on_home %} class="active"{% endif %} id="tree-menu-home">
-    <a href="{% url "home" %}">{% trans "Bio" %}</a>
-  </li>
-  {% endif %}
-  {% if page.show_in_menus %}
+  {% for menu_page in menu_pages %}
+  {% if menu_page.show_in_menus %}
   <li class="
-    {% if page.is_current %} active{% endif %}
-    {% if page.is_current_or_ascendant %} active-branch{% endif %}
-    " id="tree-menu-{{ page.html_id }}">
-    <a href="{% pageurl page %}">{{ page.title }}</a>
-    {# wrap the next line with 'if page.is_current_or_ascendant' #}
-    {# to only show child pages in the menu for the current page #}
-   {% if page.has_children_in_menu %}{% top_menu page %}{% endif %}
-
+    {% if menu_page.is_current_or_ascendant %} active{% endif %}
+    {% if menu_page.is_current_or_ascendant %} active-branch{% endif %}
+    " id="tree-menu-{{ menu_page.html_id }}">
+    <a href="{% pageurl menu_page %}">{{ menu_page.title }}</a>
+    {% if menu_page.is_current_or_ascendant %}
+    {% if menu_page.children_to_show %}{% top_menu "menus/tree.html" current_page menu_page %}{% endif %}
+    {% endif %}
   </li>
   {% endif %}
   {% endfor %}
