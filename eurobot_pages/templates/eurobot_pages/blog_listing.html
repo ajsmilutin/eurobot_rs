@@ -10,28 +10,26 @@
 {{ page.custom_title }}
 {% endblock %}
 {% endif %}
-{% block content %}    
+{% block content %}
 {% wagtail_site as current_site %}
-    {% if page.raw_html %}
-    {{ page.body }}
-    {% else %}
-    {{ page.body|richtext }}
-    {% endif %}
-    {% if posts %}       
-    <div class="container">
-        {% for post in posts%}   
-        <div class="row well">  
-            <a href="{% pageurl post%}">      
+    {% for block in page.content %}
+    {% include_block block %}
+    {% endfor %}
+    {% if posts %}
+    <div>
+        {% for post in posts%}
+        <div class="row well">
+            <a href="{% pageurl post%}">
                 <div class="col-sm-12">
-                    <h2>{{post.title}}</h2>                                       
+                    <h2>{{post.title}}</h2>
                     <p>{{post.summary|richtext}}</p>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     {% trans "Published by" %}: <span class="glyphicon-user"></span> {{post.owner}}
                 </div>
-                <div class="col-sm-4">                    
+                <div class="col-sm-2">
                 </div>
-                <div class="col-sm-4 text-right">
+                <div class="col-sm-5 text-right">
                     {% trans "Published on"%}: {{post.first_published_at}}
                 </div>
             </a>

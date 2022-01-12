@@ -29,7 +29,7 @@
         <script src="{% static "js/bootstrap.js" %}"></script>
         <script src="{% static "js/bootstrap-extras.js" %}"></script>
 
-        <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500' rel='stylesheet' type='text/css'>
+        {% comment %} <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500' rel='stylesheet' type='text/css'> {% endcomment %}
         <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,500' rel='stylesheet' type='text/css'>
 
         <!-- Font awesome -->
@@ -83,7 +83,7 @@
         {% endblock %}
         <div class="container">
             <div class="row">
-                <div class="col-md-offset-2 col-md-10 middle">
+                <div class="col-md-offset-3 col-md-9 middle">
                     <h1>{% block page_title %}{{ page.title }}
                     {% endblock %}</h1>
                 </div>
@@ -92,12 +92,12 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-md-2 left">
+                <div class="col-md-3 left">
                     {% block left_panel %}
                      <div class="panel panel-default tree">{% top_menu "menus/tree.html" page %}</div>
                     {% endblock %}
                 </div>
-                <div class="col-md-10 middle">
+                <div class="col-md-9 middle">
                     {% block content %}{% endblock %}
                 </div>
 

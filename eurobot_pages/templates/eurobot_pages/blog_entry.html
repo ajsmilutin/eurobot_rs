@@ -10,11 +10,9 @@
 {% block content %}    
 {% wagtail_site as current_site %}
     <div class="col-sm-12" style="padding: 0">
-        {% if page.raw_html %}
-        {{ page.body }}
-        {% else %}
-        {{ page.body|richtext }}
-        {% endif %}    
+        {% for block in page.content %}
+        {% include_block block %}
+        {% endfor %}
     </div>
     <div class="col-sm-6">
         {% trans "Published by" %}: <span class="glyphicon-user"></span> {{page.owner}}

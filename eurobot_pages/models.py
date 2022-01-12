@@ -1,25 +1,31 @@
-from re import L
 from django.db import models
 
 from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
-
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.blocks import RichTextBlock, RawHTMLBlock
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 from tournaments.models import Tournament
 
 class RichTextPage(Page):
-    body = RichTextField(blank=True)
+    content = StreamField([
+            ("full_richtext", RichTextBlock()),
+            ("raw_html", RawHTMLBlock()),
+        ],
+        null=True,
+        blank=True)
     show_in_menus_default = True
     content_panels = Page.content_panels + [
-        FieldPanel('body', classname="full"),
+        StreamFieldPanel('content')
     ]
 
 
 class BlogEntry(RichTextPage):
     show_in_menus_default = False
     summary = RichTextField(blank=True)
-    content_panels = RichTextPage.content_panels + [
+    content_panels = Page.content_panels + [
         FieldPanel('summary', classname="full"),
+        StreamFieldPanel('content')
     ]
     ordering = ['-first_published_at']
 
@@ -33,7 +39,7 @@ class BlogListing(RichTextPage):
 
     content_panels = Page.content_panels + [
         FieldPanel('custom_title', classname="full"),
-        FieldPanel('body', classname="full"),
+        StreamFieldPanel('content')
     ]
 
     def get_context(self, request, *args, **kwargs):

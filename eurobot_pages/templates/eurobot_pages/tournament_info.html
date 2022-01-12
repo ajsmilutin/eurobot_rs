@@ -6,7 +6,9 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}    
-{{ page.body|richtext }}
+{% for block in page.content %}
+{% include_block block %}
+{% endfor %}
 {% with tournament=page.tournament %}
 <h2>{% trans 'Place and time' %}</h2>
 <table class="table">

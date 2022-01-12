@@ -6,7 +6,9 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}    
-{{ page.body|richtext }}
+{% for block in page.content %}
+{% include_block block %}
+{% endfor %}
 {% with tournament=page.tournament %}
 
 {% if tournament.first_place or tournament.third_place or tournament.second_place %}

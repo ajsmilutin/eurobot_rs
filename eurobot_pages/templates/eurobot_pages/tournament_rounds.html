@@ -6,7 +6,9 @@
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-{{ page.body|richtext }}
+{% for block in page.content %}
+{% include_block block %}
+{% endfor %}
 {% with tournament=page.tournament %}
 {% if tournament.elimination_rounds.all %}
 <h2>{% trans 'Elimination rounds' %}</h2>
@@ -84,14 +86,14 @@
 		</tr>
 	{% for game in round.games.all %}
 		  <tr>
-			 <td class="col-md-5 text-right"  style="background-color:{{tournament.player_color}}">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+			 <td class="col-md-4 text-right"  style="background-color:{{tournament.player_color}}">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
 			    {% if game.status == 'planned' %}
-			    	<td class="col-md-1 text-center">-</td>
+			    	<td class="col-md-2 text-center">-</td>
 			    {% else %}
-			    	<td class="col-md-1 text-center">{{ game.player_score }} : {{ game.opponent_score }}</td>
+			    	<td class="col-md-2 text-center">{{ game.player_score }} : {{ game.opponent_score }}</td>
 			    {% endif %}
-			    <td class="col-md-5 text-left" style="background-color:{{tournament.opponent_color}}">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
-          <td class="col-md-1 text-center">{% trans game.status|capfirst %}</td>
+			    <td class="col-md-4 text-left" style="background-color:{{tournament.opponent_color}}">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+          <td class="col-md-2 text-center">{% trans game.status|capfirst %}</td>
 		  </tr>
 	{% endfor %}
 	</table>

@@ -7,7 +7,6 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, FieldRowPanel, TabbedInterface, ObjectList, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
-
 class Tournament(ClusterableModel):
     name = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
