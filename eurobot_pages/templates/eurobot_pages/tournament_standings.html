@@ -39,11 +39,11 @@
 
 {% if standings %}
 <h1>{% trans 'Group phase' %}</h1>
-<table class="table">
+<table>
 	<tr>
-		<th>{% trans 'Rank' %}</th>		
+		<th class="hidden-xs hidden-sm">{% trans 'Rank' %}</th>		
 		<th>{% trans 'Name' %}</th>		
-		<th>{% trans 'School' %}</th>	
+		<th class="hidden-xs hidden-sm hidden-md">{% trans 'School' %}</th>	
 		{% for round in tournament.rounds.all %}
 			<th>{{ round.name }}</th>
 		{% endfor %}	  
@@ -51,10 +51,10 @@
 	</tr>
 {% for player_score in standings %}
 	<tr>
-		<td>{{ forloop.counter }}</td>		
+		<td class="hidden-xs hidden-sm">{{ forloop.counter }}</td>		
 		<td class="player">{{ player_score.player.name|safe }}</td>
 		
-		<td>{{ player_score.player.school }}</td>
+		<td class="hidden-xs hidden-sm hidden-md">{{ player_score.player.school }}</td>
 		{% for game in player_score.games %}
 			{% comment %} {% if game.game.player_id == row.player.id %} {% endcomment %}
 			{%if game %}
@@ -76,6 +76,7 @@
 	</tr>
 {% endfor %}
 </table>
+
 {% else %}
 	<h2>{% trans 'No rounds have been setup.' %}</h2>
 {% endif %}

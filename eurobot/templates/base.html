@@ -83,14 +83,16 @@
         {% endblock %}
         <div class="container">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="hidden-md hidden-lg">{% top_menu "menus/top_menu.html" page %}</div>
+                </div>
+            </div>                        
+            <div class="row">
                 <div class="col-md-offset-3 col-md-9 middle">
                     <h1>{% block page_title %}{{ page.title }}
                     {% endblock %}</h1>
                 </div>
-            </div>
-        </div>
-
-        <div class="container">
+            </div>        
             <div class="row">
                 <div class="col-md-3 left">
                     {% block left_panel %}

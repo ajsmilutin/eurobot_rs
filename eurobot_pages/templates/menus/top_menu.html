@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load menu_tags %}
+{% load wagtailcore_tags %}
+
+{% spaceless %}  
+  {% for menu_page in menu_pages %}
+  {% if menu_page.show_in_menus %}  
+  {% if has_root == False %}
+    <a style ="{% if menu_page.is_current_or_ascendant %}font-weight: bold{% endif %}" href="{% pageurl menu_page %}">{{ menu_page.title }}</a> /        
+    {% endif %}
+    {% if menu_page.is_current_or_ascendant %}
+    {% if menu_page.children_to_show %}    
+    <div {% if has_root == False %}style="padding-left: 15px" {% endif %} >
+      {% top_menu "menus/top_menu.html" current_page menu_page %}
+    </div>
+    {% endif %}    
+    {% endif %}
+    {% endif %}
+  {% endfor %}  
+</ul>
+{% endspaceless %}

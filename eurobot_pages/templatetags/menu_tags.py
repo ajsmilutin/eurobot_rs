@@ -19,22 +19,25 @@ def top_menu(context, menu_template, current_page, root = None):
                 page, current_page.get_parent())
         else:
             return False
-
+    
     if root is None:
         root = current_page.get_site().root_page
         root.is_current_or_ascendant = root.id == current_page.id
         menu_pages = [root]
+        has_root = True
     else:
         menu_pages = []
+        has_root = False
 
     for menu_page in root.get_children().live().filter(
             show_in_menus=True):
         menu_page.children_to_show = menu_page.get_children().live().filter(
             show_in_menus=True)
-        menu_page.is_current_or_ascendant = is_current_or_ascendant(menu_page, current_page)
+        menu_page.is_current_or_ascendant = is_current_or_ascendant(menu_page, current_page)        
         menu_pages.append(menu_page)
 
 
     return render_to_string(menu_template, {
         "menu_pages": menu_pages,
-         "current_page": current_page})
+         "current_page": current_page,
+         "has_root": has_root})
