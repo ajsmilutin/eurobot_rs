@@ -38,5 +38,8 @@
     </div>
     {% else %}
     {% trans "No posts available" %}
-    {% endif %}
+    {% endif %}    
+    {% for block in page.footer_content %}
+        {% include_block block %}
+    {% endfor %}
 {% endblock %}

@@ -81,4 +81,7 @@
 	<h2>{% trans 'No rounds have been setup.' %}</h2>
 {% endif %}
 {% endwith %}
+{% for block in page.footer_content %}
+{% include_block block %}
+{% endfor %}
 {% endblock %}

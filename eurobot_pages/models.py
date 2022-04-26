@@ -14,9 +14,16 @@ class RichTextPage(Page):
         ],
         null=True,
         blank=True)
+    footer_content = StreamField([
+            ("full_richtext", RichTextBlock()),
+            ("raw_html", RawHTMLBlock()),
+        ],
+        null=True,
+        blank=True)
     show_in_menus_default = True
     content_panels = Page.content_panels + [
-        StreamFieldPanel('content')
+        StreamFieldPanel('content'),
+        StreamFieldPanel('footer_content')
     ]
 
 
@@ -51,15 +58,11 @@ class BlogListing(RichTextPage):
 
 class TournamentInfo(RichTextPage):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    content_panels = RichTextPage.content_panels + [
-        FieldPanel('tournament'),
-    ]
+    content_panels = [FieldPanel('tournament'),] + RichTextPage.content_panels
 
 class TournamentRounds(RichTextPage):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    content_panels = RichTextPage.content_panels + [
-        FieldPanel('tournament'),
-    ]
+    content_panels = [FieldPanel('tournament'),] + RichTextPage.content_panels
 
 class TournamentStandings(RichTextPage):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
@@ -101,6 +104,4 @@ class TournamentStandings(RichTextPage):
             context['standings'] = standings
         return context
 
-    content_panels = RichTextPage.content_panels + [
-        FieldPanel('tournament'),
-    ]
+    content_panels = [FieldPanel('tournament'),] + RichTextPage.content_panels

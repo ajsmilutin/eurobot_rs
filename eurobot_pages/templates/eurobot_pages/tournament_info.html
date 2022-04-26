@@ -54,4 +54,7 @@
 	{% endfor %}
 </table>
 {% endwith %}
+{% for block in page.footer_content %}
+{% include_block block %}
+{% endfor %}
 {% endblock %}
