@@ -86,13 +86,13 @@
 		</tr>
 	{% for game in round.games.all %}
 		  <tr>
-			 <td class="col-md-4 text-right"  style="background-color:{{tournament.player_color}}">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+			 <td class="col-md-4 text-right"  style="background-color:{{tournament.player_color}};font-weight: bold">{{ game.player|safe }}{% if game.player_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
 			    {% if game.status == 'planned' %}
 			    	<td class="col-md-2 text-center">-</td>
 			    {% else %}
 			    	<td class="col-md-2 text-center">{{ game.player_score }} : {{ game.opponent_score }}</td>
 			    {% endif %}
-			    <td class="col-md-4 text-left" style="background-color:{{tournament.opponent_color}}">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
+			    <td class="col-md-4 text-left" style="background-color:{{tournament.opponent_color}};font-weight: bold">{{ game.opponent|safe  }}{% if game.opponent_dummy  %} - {% trans 'Dummy' %}{% endif %}</td>
           <td class="col-md-2 text-center">{% trans game.status|capfirst %}</td>
 		  </tr>
 	{% endfor %}
