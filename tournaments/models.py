@@ -15,17 +15,17 @@ class Tournament(ClusterableModel):
     player_color = models.CharField(max_length=7, default="#ADD0E4")
     opponent_color = models.CharField(max_length=7, default="#E2DFB6")
 
-    first_place = models.OneToOneField('Player',
+    first_place = models.ForeignKey('Player',
                                        related_name='first_place',
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL)
-    second_place = models.OneToOneField('Player',
+    second_place = models.ForeignKey('Player',
                                         related_name='second_place',
                                         blank=True,
                                         null=True,
                                         on_delete=models.SET_NULL)
-    third_place = models.OneToOneField('Player',
+    third_place = models.ForeignKey('Player',
                                        related_name='third_place',
                                        blank=True,
                                        null=True,
